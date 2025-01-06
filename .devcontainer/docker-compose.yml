@@ -1,0 +1,27 @@
+version: '2'
+services:
+  rpt:
+    image: "rpt"
+    build:
+      context: "../"
+      dockerfile: ./.devcontainer/report-engine/Dockerfile
+      args:
+        # Update 'VARIANT' to pick a Python version: 3, 3.10, 3.11, 3.12
+        # Available image variants: https://github.com/microsoft/vscode-dev-containers/blob/main/containers/python-3/README.md
+        VARIANT: "3"
+    volumes:
+      - ..:/opt/report-engine/code:cached
+      - ../.devcontainer/report-engine/.vscode:/opt/report-engine/.vscode:cached
+    depends_on:
+      - lb
+    tty: true
+    command: bash
+  lb:
+    image: nginx
+    #container_name: "lb"
+    volumes:
+      - ../.devcontainer/nginx/conf.d:/etc/nginx/conf.d:cached
+    ports:
+      - 80:80
+    restart: always
+

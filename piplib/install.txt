@@ -1,0 +1,5 @@
+
+pip install ./py3o.renderers.juno-0.6/
+
+py3o.renderers.juno-0.6.tar.gz
+https://pypi.org/project/py3o.renderers.juno/0.6/
