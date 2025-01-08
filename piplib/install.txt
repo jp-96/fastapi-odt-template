@@ -1,5 +1,7 @@
+https://pypi.org/project/py3o.renderers.juno/0.6/
+py3o.renderers.juno-0.6.tar.gz
 
+cd /opt/report-engine/code/piplib/
 pip install ./py3o.renderers.juno-0.6/
 
-py3o.renderers.juno-0.6.tar.gz
-https://pypi.org/project/py3o.renderers.juno/0.6/
+pip install --upgrade ./py3o.renderers.juno-0.6/

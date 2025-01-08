@@ -1,0 +1,5 @@
+
+unoserver
+
+cd /opt/report-engine/code/example/unoserver
+unoconvert sampleja.odt sampleja.pdf

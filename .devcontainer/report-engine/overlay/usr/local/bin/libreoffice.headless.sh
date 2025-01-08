@@ -11,12 +11,12 @@
 # Modified by Sergey Podushkin
 # Modified by Fábio Caritas Barrionuevo da Luz
 # Baseado em: http://superuser.com/questions/542237/init-d-script-for-openoffice-libreoffice-headless-does-not-stop-process
-#             GitHub Gist - https://gist.github.com/luzfcb/479fa8cb00bca50ecc6e
+#           GitHub Gist  https://gist.github.com/luzfcb/479fa8cb00bca50ecc6e
 
-OOo_HOME=/usr/bin
-SOFFICE_PATH=$OOo_HOME/soffice
-#PIDFILE=/var/run/libreoffice-server.pid
-PIDFILE=libreoffice-server.pid
+ACCEPT_HOST=0
+ACCEPT_PORT=8997
+PIDFILE=/var/run/libreoffice-server.pid
+PID=`ps ax|grep "soffice.bin --headless"|grep -v grep|cut -d p -f 1`
 set -e
 
 case "$1" in
@@ -27,14 +27,13 @@ case "$1" in
       exit
     fi
       echo "Starting LibreOffice headless server"
-      $SOFFICE_PATH --nologo --norestore --invisible --headless --accept='socket,host=0,port=8997,tcpNoDelay=1;urp;' & > /dev/null 2>&1
-      PID=`ps ax|grep "soffice.bin --headless"|grep -v grep|cut -d \  -f 1`
-      echo $PID> $PIDFILE
+      /usr/bin/libreoffice --nologo --norestore --invisible --headless --accept='socket,host=0,port=8997,tcpNoDelay=1;urp;' & > /dev/null 2>&1
+      echo "LibreOffice headless server is running." > $PIDFILE
     ;;
     stop)
     if [ -f $PIDFILE ]; then
-      echo "Stopping LibreOffice headless server."
-      kill `cat $PIDFILE`
+      echo "Stopping LibreOffice headless server. $PID"
+      kill $PID
       rm -f $PIDFILE
       exit
     fi

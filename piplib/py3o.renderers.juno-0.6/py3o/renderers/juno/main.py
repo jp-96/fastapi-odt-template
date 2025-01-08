@@ -1,7 +1,7 @@
-import jpype1 as jpype
-from jpype1 import startJVM
+import jpype
+from jpype import startJVM
 #from jpype import java
-from jpype1 import JPackage
+from jpype import JPackage
 #, JavaException
 
 import os

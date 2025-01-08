@@ -42,23 +42,30 @@ RUN mkdir /home/vscode/.vscode-server \
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends unzip poppler-utils
 
-# Install several additional components and Python libs:
-#  - a Java Runtime Environment (JRE), which can be OpenJDK,
-#  - Libreoffice started in the background in headless mode,
-#  - the Java driver for Libreoffice (Juno).
+# # Install several additional components and Python libs:
+# #  - a Java Runtime Environment (JRE), which can be OpenJDK,
+# #  - Libreoffice started in the background in headless mode,
+# #  - the Java driver for Libreoffice (Juno).
+# RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
+#     && apt-get -y install --no-install-recommends \
+# 		# Installation of Libreoffice, JRE and required Java libs on Debian/Ubuntu:
+# 		# default-jre \
+#         default-jdk \
+# 		libreoffice-java-common \
+# 		libreoffice-writer \
+# 		# Init system
+# 		supervisor \
+# 	&& apt-get clean && rm -rf /var/lib/apt/lists/*
+
+#  - Libreoffice started in the background in headless mode by unoserver
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends \
-		# Installation of Libreoffice, JRE and required Java libs on Debian/Ubuntu:
-		# default-jre \
-        default-jdk \
-		libreoffice-java-common \
-		libreoffice-writer \
+        # Installation of Libreoffice, JRE and required Java libs on Debian/Ubuntu:
+        default-jre \
+		libreoffice \
 		# Init system
 		supervisor \
 	&& apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# replace default setup with a one disabling logos by default
-ADD .devcontainer/report-engine/overlay /
 
 # Install fonts
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
@@ -88,9 +95,56 @@ RUN cd /usr/local/archiveipa \
     && fc-cache -vf
 USER root
 
+# # Install Japanese fonts
+# # ###################################
+# #   IPA FONT LICENSE AGREEMENT V1.0
+# # https://moji.or.jp/ipafont/license/
+# # ###################################
+# ADD archiveipa /usr/local/archiveipa
+# RUN cd /usr/local/archiveipa \
+# 	# IPAmj Mincho Font
+#     && unzip ipamjm00601.zip -d /usr/share/fonts/truetype/ipamjm0601 \
+#     # IPAex Font（2 fonts）
+#     && unzip IPAexfont00401.zip -d /usr/share/fonts/truetype/ipaexfont00401 \
+#     # IPA Font（4 fonts）
+#     && unzip IPAfont00303.zip -d /usr/share/fonts/truetype/ipafont00303 \
+#     # Build font information cache files
+#     && fc-cache -vf
+# # Build font information cache files
+# USER vscode
+# RUN fc-cache -vf
+# USER root
+
+# # Install Japanese fonts
+# # ###################################
+# #   IPA FONT LICENSE AGREEMENT V1.0
+# # https://moji.or.jp/ipafont/license/
+# # ###################################
+# ADD archiveipa /usr/local/archiveipa
+# RUN cd /usr/local/archiveipa \
+# 	# IPAmj Mincho Font
+#     && unzip ipamjm00601.zip -d /usr/local/share/fonts/truetype/ipamjm0601 \
+#     # IPAex Font（2 fonts）
+#     && unzip IPAexfont00401.zip -d /usr/local/share/fonts/truetype/ipaexfont00401 \
+#     # IPA Font（4 fonts）
+#     && unzip IPAfont00303.zip -d /usr/local/share/fonts/truetype/ipafont00303 \
+#     # Build font information cache files
+#     && fc-cache -vf
+# # Build font information cache files
+# USER vscode
+# RUN fc-cache -vf
+# USER root
+
+# replace default setup with a one disabling logos by default
+ADD .devcontainer/report-engine/overlay /
+
 # # [Optional] If your pip requirements rarely change, uncomment this section to add them to the image.
 # COPY requirements.txt /tmp/pip-tmp/
 # RUN pip3 --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requirements.txt \
 #     && rm -rf /tmp/pip-tmp
+
+RUN wget https://bootstrap.pypa.io/get-pip.py \
+    && /usr/bin/python3 get-pip.py \
+    && /usr/bin/python3 -m pip install unoserver -U
 
 # ENTRYPOINT ["/usr/bin/supervisord"]
