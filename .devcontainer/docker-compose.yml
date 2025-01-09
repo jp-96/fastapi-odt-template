@@ -14,6 +14,7 @@ services:
       - ../.devcontainer/report-engine/.vscode:/opt/report-engine/.vscode:cached
     depends_on:
       - lb
+      - unoserver
     tty: true
     command: bash
   lb:
@@ -24,4 +25,9 @@ services:
     ports:
       - 80:80
     restart: always
+  unoserver:
+    image: "unoserver"
+    build:
+      context: "../"
+      dockerfile: ./.devcontainer/unoserver/Dockerfile
 

@@ -2,4 +2,6 @@
 unoserver
 
 cd /opt/report-engine/code/example/unoserver
-unoconvert sampleja.odt sampleja.pdf
+unoconvert --host unoserver sampleja.odt sampleja.pdf
+
+unoconvert sampleja.odt outfile.png --host unoserver --filter-options PixelWidth=640 --filter-options PixelHeight=480
