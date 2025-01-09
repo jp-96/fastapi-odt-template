@@ -24,7 +24,6 @@ services:
       - ../.devcontainer/nginx/conf.d:/etc/nginx/conf.d:cached
     ports:
       - 80:80
-    restart: always
   unoserver:
     image: "unoserver"
     build:
