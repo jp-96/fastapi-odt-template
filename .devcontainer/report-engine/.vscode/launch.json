@@ -9,7 +9,7 @@
             "name": "report engine",
             "type": "debugpy",
             "request": "launch",
-            "cwd": "/opt/report-engine/code",
+            "cwd": "/opt/report-engine/code/src",
             "program": "main.py",
             "console": "integratedTerminal"
         }

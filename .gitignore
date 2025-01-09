@@ -170,6 +170,10 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 
+
+# data folder
+/data
+
 # example outputs
 /example/py3o/py3o_example.pdf
 /example/unoserver/sampleja.pdf
