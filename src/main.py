@@ -9,7 +9,7 @@ app.include_router(api.api_router)
 
 def serve():
     """Serve the web application."""
-    uvicorn.run(app, port=8002, host='localhost')
+    uvicorn.run(app, port=8002, host='0.0.0.0')
 
 if __name__ == "__main__":
     serve()
