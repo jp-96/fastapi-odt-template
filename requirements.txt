@@ -1,0 +1,8 @@
+fastapi
+python-multipart
+pydantic
+uvicorn
+unoserver
+jinja2
+markdown2
+python_odt_template

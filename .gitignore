@@ -169,5 +169,13 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
-/example/unoserver/sampleja.pdf
+
+
+# data folder
+/data
+
+# example outputs
 /example/py3o/py3o_example.pdf
+/example/unoserver/sampleja.pdf
+/example/unoserver/sampleja.png
+/example/unoserver/sampleja.py.pdf

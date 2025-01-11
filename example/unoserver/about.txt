@@ -2,13 +2,47 @@
 unoserver
 
 cd /opt/report-engine/code/example/unoserver
-unoconvert --host unoserver sampleja.odt sampleja.pdf
+unoconvert sampleja.odt sampleja.pdf --host unoserver
+unoconvert sampleja.odt sampleja.pdf --host unoserver --output-filter 'writer_pdf_Export'
+unoconvert sampleja.odt sampleja.pdf --host unoserver --output-filter 'writer_pdf_Export' --filter-options SelectPdfVersion=16
+unoconvert sampleja.odt sampleja.pdf --host unoserver --output-filter 'writer_pdf_Export' --filter-options Watermark="下書き"
 
-unoconvert sampleja.odt outfile.png --host unoserver --filter-options PixelWidth=640 --filter-options PixelHeight=480
-
+unoconvert sampleja.odt sampleja.png --host unoserver --filter-options PixelWidth=640 --filter-options PixelHeight=480
+unoconvert sampleja.odt sampleja.png --host unoserver --filter-options PixelWidth=640 PixelHeight=480
 
 python
 
 from unoserver import client
 c = client.UnoClient(server="unoserver")
-c.convert(inpath="sampleja.odt",outpath="client.pdf")
+c.convert(inpath="sampleja.odt",outpath="sampleja.py.pdf")
+exit()
+
+
+python
+
+from unoserver import client
+uno = client.UnoClient(server='unoserver')
+convert_command = {
+    'inpath': 'sampleja.odt',
+    'outpath': 'sampleja.py.pdf',
+}
+uno.convert(**convert_command)
+exit()
+
+
+python
+
+from unoserver import client
+uno = client.UnoClient(server='unoserver')
+convert_command = {
+    'inpath': 'sampleja.odt',
+    'outpath': 'sampleja.py.pdf',
+    'convert_to': 'pdf',
+    'filtername': 'writer_pdf_Export',
+    'filter_options': [
+        'Watermark=draft（下書き）',
+        'SelectPdfVersion=2'
+    ]
+}
+uno.convert(**convert_command)
+exit()
