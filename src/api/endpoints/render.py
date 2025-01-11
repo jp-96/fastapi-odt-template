@@ -22,7 +22,11 @@ def CreatePDFReport(body: render.ReportCreateRequest):
     with ODTTemplate(report_file_path) as template:
         odt_renderer.render(
             template,
-            context={},
+            context=body.Context,
         )
         template.pack(rendered_file_path)
-    return FileResponse(rendered_file_path, filename='%d.pdf' % timestamp)
+    return FileResponse(
+        rendered_file_path,
+        media_type="application/octet-stream",
+        filename='%d.odt' % timestamp
+    )
