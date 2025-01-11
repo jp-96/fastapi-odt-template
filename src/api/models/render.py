@@ -1,6 +1,8 @@
 from pydantic import BaseModel, Field
-import typing
 
 class ReportCreateRequest(BaseModel):
-    Context: dict = Field(alias="context")
-    TemplateID: str = Field(alias="template_id")
+    TemplateID: str = Field(..., alias="template_id")
+    Context: dict = Field(..., alias="context")
+    ConvertTo: str = Field(default=None, alias="convert_to")
+    Filtername: str = Field(default=None, alias="filtername")
+    FilterOptions: dict = Field(default={}, alias="filter_options")
