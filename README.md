@@ -35,6 +35,7 @@
 
 
 ```json
+
 {
     "template_id": "simple_template.odt",
     "convert_to": "pdf",
@@ -44,6 +45,7 @@
         "SelectPdfVersion": "2"
     },
     "context": {
+        "image": "writer.png",
         "document": {
             "datetime": "2025/01/23 12:34",
             "md_sample": "マークアップテキストです。"
@@ -67,4 +69,5 @@
         ]
     }
 }
+
 ```

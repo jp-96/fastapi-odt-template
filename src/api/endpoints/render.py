@@ -61,7 +61,7 @@ def CreatePDFReport2(images: list[UploadFile], report: render.ReportCreateReques
 
 # Create PDF Report
 @router.post("/render3",summary="Creates a pdf report.", tags=["Render"])
-def CreatePDFReport3(report: render.ReportCreateRequest = Body(...), image: UploadFile = File(...)):
+def CreatePDFReport3(report: render.ReportCreateRequest, image: UploadFile = File(...)):
     return {"filenames": [{image.filename}]}
 
 
