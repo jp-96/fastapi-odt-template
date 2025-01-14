@@ -55,6 +55,8 @@ def render(report_request: ReportGenerationRequest, template: UploadFile, images
     # render basename
     response_file_basename = sanitize_filename(Template(response_file_basename).render(report_request.document_content))
 
+    # TODO: tmp cleanup when exception occured! 
+
     # work dir
     work_folder_path = tempfile.mkdtemp()
     media_folder_path = os.path.join(work_folder_path, "media")
