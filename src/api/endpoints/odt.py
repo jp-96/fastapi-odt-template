@@ -20,7 +20,7 @@ class JsonBaseModel(BaseModel):
 class ReportGenerationRequest(JsonBaseModel):
     document_content: dict = Field(default={}, description='The content of the document to be rendered.')
     convert_to_pdf: bool = Field(default=False, description='Indicates if the document should be converted to a PDF file.')
-    pdf_filter_options: dict = Field(default={}, description='Options for the PDF export filter to be applied during conversion.')
+    pdf_filter_options: dict = Field(default={}, description='Options for the PDF export filter to be applied during conversion. See this link: https://help.libreoffice.org/latest/en-US/text/shared/guide/pdf_params.html')
 
 @router.post("/odt",summary="render the report.", tags=["Render"])
 def render(report_request: ReportGenerationRequest, template: UploadFile, images: Optional[List[UploadFile]]=File(None)):
@@ -33,7 +33,7 @@ def render(report_request: ReportGenerationRequest, template: UploadFile, images
     os.mkdir(temp_folder_path)
     media_folder_path = temp_folder_path + "media/"
     os.mkdir(media_folder_path)
-    odt_renderer = get_odt_renderer(media_folder_path)
+
     try:
         contents = template.file.read()
         name = template.filename.replace(" ", "_")
@@ -61,7 +61,7 @@ def render(report_request: ReportGenerationRequest, template: UploadFile, images
 
     rendered_file_path = temp_folder_path + "rendered_%s.odt" % timestamp
     with ODTTemplate(template_file_path) as template:
-        odt_renderer.render(
+        get_odt_renderer(media_folder_path).render(
             template,
             context=report_request.document_content,
         )
@@ -72,15 +72,26 @@ def render(report_request: ReportGenerationRequest, template: UploadFile, images
             media_type="application/octet-stream",
             filename='%d.odt' % timestamp
         )
+    
     # convert to pdf
+    filter_options = []
+    if (not report_request.pdf_filter_options is None):
+        for k, v in report_request.pdf_filter_options.items():
+            filter_options.append('%s=%s' % (k, v))
+    filtername = None
+    if (len(filter_options) > 0):
+        filtername = "writer_pdf_Export"
+    
     converted_file_path = temp_folder_path + "converted_%s.pdf" % timestamp
-    uno = client.UnoClient(server='unoserver')
     convert_command = {
         'inpath': rendered_file_path,
         'outpath': converted_file_path,
-        'convert_to': "pdf"
+        'convert_to': "pdf",
+        'filtername': filtername,
+        'filter_options': filter_options
     }
-    uno.convert(**convert_command)   
+    client.UnoClient(server='unoserver').convert(**convert_command)
+
     return FileResponse(
         converted_file_path,
         filename='%d.pdf' % timestamp
